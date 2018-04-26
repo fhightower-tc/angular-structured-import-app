@@ -1,4 +1,4 @@
-# Structured Data Importer
+# Structured Import App
 
 Structured import for humans.
 
