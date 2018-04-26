@@ -6,6 +6,7 @@ import {
 from '@angular/router';
 import { MainComponent } from './main.component';
 import { SpacesBaseService } from 'spaces-ng';
+import { ActComponent } from './components/act/act.component';
 
 const routes: Routes = [{
     path: '',
@@ -14,6 +15,10 @@ const routes: Routes = [{
   }, {
     path: 'index.html',
     component: MainComponent,
+    resolve: {base: SpacesBaseService},
+  }, {
+    path: 'act',
+    component: ActComponent,
     resolve: {base: SpacesBaseService},
   }];
 

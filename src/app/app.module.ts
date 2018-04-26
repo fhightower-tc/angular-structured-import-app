@@ -57,6 +57,8 @@ import {
     // Url
 } from 'threatconnect-ng';
 import { ImportComponent } from './components/import/import.component';
+import { ActComponent } from './components/act/act.component';
+import { TransferService } from './services/transfer.service';
 
 @NgModule({
     imports: [
@@ -86,7 +88,8 @@ import { ImportComponent } from './components/import/import.component';
     declarations: [
         AppComponent,
         MainComponent,
-        ImportComponent
+        ImportComponent,
+        ActComponent
     ],
     providers: [
         /* Bowser Service */
@@ -101,7 +104,8 @@ import { ImportComponent } from './components/import/import.component';
         TcExchangeDbService,
         TcGroupService,
         TcIndicatorService,
-        TcOwnerService
+        TcOwnerService,
+        TransferService,
     ],
     bootstrap: [AppComponent]
 })
