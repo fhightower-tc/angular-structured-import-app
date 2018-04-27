@@ -10,6 +10,7 @@ import { TransferService } from '../../services/transfer.service';
 export class ActComponent implements OnInit {
     poorlyFormattedLines: Array<string[]> = [];
     lines: Array<string[]> = [];
+    inactiveLines: Array<string[]> = [];
 
     constructor(
         private transfer: TransferService

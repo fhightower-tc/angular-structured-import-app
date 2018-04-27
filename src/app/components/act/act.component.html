@@ -1,3 +1,49 @@
-<p>
-  act works! {{ lines.length }} - {{ poorlyFormattedLines.length }}
-</p>
+<div class="float-right large-3 medium-4 small-5">
+    <form id='owner-typeahead' class="float-left">
+        <input id="owner-typeahead-input" class='typeahead tt-query focused-input' type='text' placeholder='Start typing an owner...' title='Start typing an owner' autocomplete='off' spellcheck='false' />
+    </form>
+    <button class="button" (click)="createContent()">Create!</button>
+</div>
+<div class="clearfix"></div>
+<b>{{ lines.length }} active lines</b>
+<table>
+    <tr>
+        <td *ngFor="let item of lines[0]">
+            <select>
+                <option value="" selected></option>
+                <option value="address">indicator:IP</option>
+                <option value="emailaddress">indicator:EMAIL ADDRESS</option>
+                <option value="file">indicator:FILE</option>
+                <option value="host">indicator:HOST</option>
+                <option value="url">indicator:URL</option>
+                <option value="tag">TAG</option>
+                <option value="attribute">ATTRIBUTE</option>
+                <option value="fileSize">file:SIZE</option>
+                <option value="fileName">file:NAME</option>
+            </select>
+            <input class="supplementalInput" type="text" placeholder="Attribute type (only required if you are mapping this column to an attribute)">
+        </td>
+        <td>Make Inactive <span data-tooltip aria-haspopup="true" class="has-tip" data-disable-hover='false' tabindex=1 title="You can remove a row so that it is not processed"><i class="fa fa-question"></i></span></td>
+    </tr>
+    <tr *ngFor="let entry of lines">
+        <td *ngFor="let item of entry">{{ item }}</td>
+        <td><i (click)="changeActiveStatus(entry, false)" title="Make this row inactive" class="fa fa-chevron-down"></i></td>
+    </tr>
+</table>
+
+<p><b>{{ inactiveLines.length }} inactive lines</b> - Nothing from these lines will be created</p>
+
+<table>
+    <tr *ngFor="let entry of inactiveLines">
+        <td *ngFor="let item of entry">{{ item }}</td>
+        <td><i (click)="changeActiveStatus(entry, true)" title="Make this row active" class="fa fa-chevron-up"></i></td>
+    </tr>
+</table>
+
+<p><b>{{ poorlyFormattedLines.length }} malformed lines</b> - These lines do not have the same number of entries as the other lines</p>
+
+<table>
+    <tr *ngFor="let entry of poorlyFormattedLines">
+        <td *ngFor="let item of entry">{{ item }}</td>
+    </tr>
+</table>
