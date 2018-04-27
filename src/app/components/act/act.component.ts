@@ -91,10 +91,18 @@ export class ActComponent implements OnInit {
         }
     }
 
-    private createIndicator(indicator, indicatorType, tags, attributes, fileSize, fileName) {
+    private createIndicator(indicator: string, indicatorType: string, tags: string[], attributes: Array<{
+            type: string;
+            value: string;
+            displayed?: boolean;
+        }>, fileSize: string, fileName: string) {
         /* Create an indicator with the given metadata. */
         // create the indicator
-        this.indicators.createIndicator(indicator, this.owner);
+        this.indicators.createIndicator({
+            type: indicatorType,
+            summary: indicator,
+            ownerName: this.owner
+        }, this.owner);
 
         // add tags
         for (var i = tags.length - 1; i >= 0; i--) {

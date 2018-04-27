@@ -2,6 +2,8 @@
 
 Structured import for humans.
 
+**Note:** This app will not work yet... it will not work until the development branch of the [threatconnect-ng](https://github.com/ThreatConnect-Inc/threatconnect-ng) package to be merged.
+
 ## Getting Started
 
 To get started, the code for the app is in the `src/` folder. To setup your environment for testing, run:
