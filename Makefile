@@ -20,7 +20,7 @@ setup: ## prepare app for local testing or deployment
 pack: ## package the app for PRODUCTION
 	grunt buildProd
 
-pack-dev: ## package the app for DEVELOPMENT
+packDev: ## package the app for DEVELOPMENT
 	grunt buildDev
 
 run: ## run the app locally
