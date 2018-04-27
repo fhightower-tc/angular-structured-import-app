@@ -1,14 +1,12 @@
 <div class="float-right large-3 medium-4 small-5">
-    <form id='owner-typeahead' class="float-left">
-        <input id="owner-typeahead-input" class='typeahead tt-query focused-input' type='text' placeholder='Start typing an owner...' title='Start typing an owner' autocomplete='off' spellcheck='false' />
-    </form>
+    <input type="text" [(ngModel)]="owner" placeholder='Owner' title='Type the name of the owner into which the content will be created'>
     <button class="button" (click)="createContent()">Create!</button>
 </div>
 <div class="clearfix"></div>
-<b>{{ lines.length }} active lines</b>
+<b>{{ activeLines.length }} active lines</b>
 <table>
     <tr>
-        <td *ngFor="let item of lines[0]">
+        <td *ngFor="let item of activeLines[0]">
             <select>
                 <option value="" selected></option>
                 <option value="address">indicator:IP</option>
@@ -25,7 +23,7 @@
         </td>
         <td>Make Inactive <span data-tooltip aria-haspopup="true" class="has-tip" data-disable-hover='false' tabindex=1 title="You can remove a row so that it is not processed"><i class="fa fa-question"></i></span></td>
     </tr>
-    <tr *ngFor="let entry of lines">
+    <tr *ngFor="let entry of activeLines">
         <td *ngFor="let item of entry">{{ item }}</td>
         <td><i (click)="changeActiveStatus(entry, false)" title="Make this row inactive" class="fa fa-chevron-down"></i></td>
     </tr>

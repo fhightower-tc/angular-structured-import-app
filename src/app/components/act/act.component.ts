@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
+import { TcIndicatorService } from 'threatconnect-ng';
+
 import { TransferService } from '../../services/transfer.service';
+
+declare var $:any;
 
 @Component({
     selector: 'act',
@@ -9,11 +13,14 @@ import { TransferService } from '../../services/transfer.service';
 })
 export class ActComponent implements OnInit {
     poorlyFormattedLines: Array<string[]> = [];
-    lines: Array<string[]> = [];
+    // TODO: rename this to "activeLines"
+    activeLines: Array<string[]> = [];
     inactiveLines: Array<string[]> = [];
+    owner: string = '';
 
     constructor(
-        private transfer: TransferService
+        private transfer: TransferService,
+        private indicators: TcIndicatorService
     ) { }
 
     ngOnInit() {
@@ -35,6 +42,7 @@ export class ActComponent implements OnInit {
                 return false;
             }
         }
+        // TODO: consider adding a check for the number of rows
 
         return lines;
     }
@@ -69,7 +77,7 @@ export class ActComponent implements OnInit {
             if (lineArray.length !== expectedLength) {
                 this.poorlyFormattedLines.push(lineArray)
             } else {
-                this.lines.push(lineArray);
+                this.activeLines.push(lineArray);
             }
         }
     }
@@ -81,6 +89,108 @@ export class ActComponent implements OnInit {
         } else {
             // TODO: do something here...
         }
+    }
+
+    private createIndicator(indicator, indicatorType, tags, attributes, fileSize, fileName) {
+        /* Create an indicator with the given metadata. */
+        // create the indicator
+        this.indicators.createIndicator(indicator, this.owner);
+
+        // add tags
+        for (var i = tags.length - 1; i >= 0; i--) {
+            this.indicators.addTag(tags[i], indicatorType, indicator, this.owner);
+        }
+
+        // add attributes
+        for (var i = attributes.length - 1; i >= 0; i--) {
+            this.indicators.createAttribute(attributes[i].type, attributes[i].value, attributes[i].displayed, indicatorType, indicator, this.owner);
+        }
+
+        // TODO: implement handling for file size and file occurrences
+    }
+
+    createContent() {
+        /* Create content in ThreatConnect. */
+        // make sure there is an owner
+        if (this.owner === '') {
+            // TODO: add a message here...
+            console.log("No owner given");
+            return;
+        }
+
+        let mappings: string[] = [];
+        $('select').each(function() {
+            mappings.push($(this).val());
+        });
+
+        let additionalInputs = [];
+        $('.supplementalInput').each(function() {
+            additionalInputs.push($(this).val());
+        });
+
+        for (var row = this.activeLines.length - 1; row >= 0; row--) {
+            let tags: string[] = [];
+            let attributes: Array<{
+                type: string;
+                value: string;
+                displayed?: boolean;
+            }> = [];
+            let fileSize: string = '';
+            let fileName: string = '';
+            let indicatorType: string = '';
+            let indicator: string = '';
+
+            // iterate through each of the columns
+            for (var column = mappings.length - 1; column >= 0; column--) {
+                switch(mappings[column]) {
+                    case 'tag': {
+                        tags.push(this.activeLines[row][column]);
+                        break;
+                    }
+                    case 'attribute': {
+                        let attributeType = additionalInputs[column];
+                        if (attributeType === '') {
+                            // TODO: add a message here
+                            console.log('No attribute type given');
+                        } else {
+                            attributes.push({
+                                type: attributeType,
+                                value: this.activeLines[row][column],
+                                displayed: true
+                            });
+                        }
+                        break;
+                    }
+                    case 'fileSize': {
+                        fileSize = this.activeLines[row][column];
+                        break;
+                    }
+                    case 'fileName': {
+                        fileName = this.activeLines[row][column];
+                        break;
+                    }
+                    default: {
+                        /* This handles any indicator types. */
+                        // if the indicator type has already been specified, show a warning that we can currently only handle one indicator type
+                        if (indicatorType !== '') {
+                            // TODO: add message
+                            console.log("Can't handle more than one indicator type");
+                        }
+                        indicatorType = mappings[column];
+                        break;
+                    }
+                }
+            }
+
+            if (indicatorType === '') {
+                // TODO: add a message here
+                console.log('You need to specify an indicator type');
+                return;
+            }
+
+            this.createIndicator(indicator, indicatorType, tags, attributes, fileSize, fileName);
+        }
+
     }
 
 }
