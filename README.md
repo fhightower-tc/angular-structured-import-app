@@ -2,7 +2,7 @@
 
 Structured import for humans.
 
-**Note:** This app will not work yet... it will not work until the development branch of the [threatconnect-ng](https://github.com/ThreatConnect-Inc/threatconnect-ng) package to be merged.
+**Note:** This app will not work yet... it will not work until the development branch of the [threatconnect-ng](https://github.com/ThreatConnect-Inc/threatconnect-ng) package is merged.
 
 ## Getting Started
 
