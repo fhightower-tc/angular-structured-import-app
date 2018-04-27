@@ -190,7 +190,37 @@ export class ActComponent implements OnInit {
 
             this.createIndicator(indicator, indicatorType, tags, attributes, fileSize, fileName);
         }
+    }
 
+    private findEntry(entry, array) {
+        /* Return the index of the given entry in the given list. */
+        for (var i = array.length - 1; i >= 0; i--) {
+            let broken: boolean = false;
+            for (var j = entry.length - 1; j >= 0; j--) {
+                if (entry[j] !== array[i][j]) {
+                    broken = true;
+                    break;
+                }
+            }
+
+            if (!broken) {
+                return i;
+            }
+        }
+
+        return null;
+    }
+
+    changeActiveStatus(entry, makeActive) {
+        if (makeActive) {
+            let entryIndex = this.findEntry(entry, this.inactiveLines);
+            this.inactiveLines.splice(entryIndex, 1);
+            this.activeLines.push(entry);
+        } else {
+            let entryIndex = this.findEntry(entry, this.activeLines);
+            this.activeLines.splice(entryIndex, 1);
+            this.inactiveLines.push(entry);
+        }
     }
 
 }
