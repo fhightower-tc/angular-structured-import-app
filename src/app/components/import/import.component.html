@@ -1,5 +1,17 @@
-<textarea placeholder="Enter some structured data here (e.g. css or json)" rows="27" [(ngModel)]="rawInput"></textarea>
+<div class="columns large-9 medium-9">
+    <textarea placeholder="Enter some structured data here (e.g. css or json)" rows="27" [(ngModel)]="rawInput"></textarea>
 
-<input type="text" [(ngModel)]="delimiter" placeholder="Enter the character(s) you would like to use to split up the text">
+    <input type="text" [(ngModel)]="delimiter" placeholder="Enter the character(s) you would like to use to split up the text">
+</div>
 
-<button class="button" (click)="submit()">Submit</button>
+<div class="columns large-3 medium-3" style="border: 1px solid lightgrey; padding: 1em;">
+    Find: <input type="text" placeholder="Value to find... (required)" [(ngModel)]="findValue">
+    Replace: <input type="text" placeholder="Value to replace..." [(ngModel)]="replaceValue">
+    <button class="button" (click)="findAndReplace()">Find and Replace</button>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="columns">
+    <button class="button" (click)="submit()">Submit</button>
+</div>
