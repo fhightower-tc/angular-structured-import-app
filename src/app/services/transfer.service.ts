@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export class TransferService {
     rawInput: string = '';
     delimiter: string = '';
+    ignoreFirstLine: boolean = false;
 
     constructor() { }
 

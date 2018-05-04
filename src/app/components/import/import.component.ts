@@ -21,6 +21,7 @@ export class ImportComponent implements OnInit {
     rawInput: string = '';
     findValue: string = '';
     replaceValue: string = '';
+    ignoreFirstLine: boolean = false;
 
     constructor(
         private main: MainComponent,
@@ -43,6 +44,7 @@ export class ImportComponent implements OnInit {
     }
 
     submit() {
+        this.transfer.ignoreFirstLine = this.ignoreFirstLine;
         this.transfer.rawInput = this.rawInput;
         this.transfer.delimiter = this.delimiter;
         this.main.goTo('act');

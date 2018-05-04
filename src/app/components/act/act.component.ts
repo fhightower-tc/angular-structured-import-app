@@ -78,6 +78,10 @@ export class ActComponent implements OnInit {
     }
 
     private cleanResults(results: Array<string[]>) {
+        if (this.transfer.ignoreFirstLine) {
+            results.splice(0, 1);
+        }
+
         let expectedLength = this.findExpectedLength(results);
         // Find any lines which do not match the expected length and move them to the poorlyFormattedLines array 
         for (var i = results.length - 1; i >= 0; i--) {
