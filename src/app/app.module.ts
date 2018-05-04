@@ -60,6 +60,8 @@ import { ImportComponent } from './components/import/import.component';
 import { ActComponent } from './components/act/act.component';
 import { TransferService } from './services/transfer.service';
 
+import { PapaParseModule } from 'ngx-papaparse';
+
 @NgModule({
     imports: [
         /* Core */
@@ -83,7 +85,8 @@ import { TransferService } from './services/transfer.service';
         SharedModule,
         StepsModule,
         TabViewModule,
-        TableModule
+        TableModule,
+        PapaParseModule
     ],
     declarations: [
         AppComponent,

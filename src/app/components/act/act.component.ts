@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { PapaParseService } from 'ngx-papaparse';
 import { TcIndicatorService } from 'threatconnect-ng';
 
 import { TransferService } from '../../services/transfer.service';
@@ -20,15 +21,22 @@ export class ActComponent implements OnInit {
 
     constructor(
         private transfer: TransferService,
-        private indicators: TcIndicatorService
+        private indicators: TcIndicatorService,
+        private papa: PapaParseService,
     ) { }
 
     ngOnInit() {
         // TODO: add checks to make sure there is a transfer.rawInput and transfer.delimiter
-        this.prepareInput();
+        this.validateInput();
+        this.papa.parse(this.transfer.rawInput.trim(), {
+            complete: (results) => {
+                this.cleanResults(results.data);
+            },
+            delimiter: this.transfer.delimiter
+        });
     }
 
-    private getLines() {
+    private validateInput() {
         /* Find each line of the input and make sure the input is reasonable. */
         let lines = this.transfer.rawInput.trim().split('\n');
 
@@ -43,16 +51,15 @@ export class ActComponent implements OnInit {
             }
         }
         // TODO: consider adding a check for the number of rows
-
-        return lines;
     }
 
-    private findExpectedLength(lines: string[]) {
+    private findExpectedLength(lines: Array<string[]>) {
         /* Try to make a reasonable guess as to the expected length of each line when it is split by the delimiter. To do this, I'm using the first three lines. */
         let expectedLength: number;
-        let l0 = lines[0].split(this.transfer.delimiter).length;
-        let l1 = lines[1].split(this.transfer.delimiter).length;
-        let l2 = lines[2].split(this.transfer.delimiter).length;
+        let l0 = lines[0].length;
+        let l1 = lines[1].length;
+        // TODO: handle situations in which there are not two lines
+        let l2 = lines[2].length;
 
         if (l0 === l1 && l0 === l2) {
             expectedLength = l0;
@@ -63,32 +70,24 @@ export class ActComponent implements OnInit {
         } else {
             // TODO: add a message here
             console.log('Unable to make a good prediction on the expected length of the input based on the first three lines');
+            // TODO: is it to just return the length of the first line?
+            expectedLength = l0;
         }
 
         return expectedLength;
     }
 
-    private splitLines(lines: string[]) {
-        /* Split each line on the delimiter and make sure everything looks correct. */
-        let expectedLength = this.findExpectedLength(lines);
-
-        for (var i = lines.length - 1; i >= 0; i--) {
-            let lineArray = lines[i].split(this.transfer.delimiter);
-            if (lineArray.length !== expectedLength) {
-                this.poorlyFormattedLines.push(lineArray)
-            } else {
-                this.activeLines.push(lineArray);
+    private cleanResults(results: Array<string[]>) {
+        let expectedLength = this.findExpectedLength(results);
+        // Find any lines which do not match the expected length and move them to the poorlyFormattedLines array 
+        for (var i = results.length - 1; i >= 0; i--) {
+            if (results[i].length !== expectedLength) {
+                this.poorlyFormattedLines.push(results[i]);
+                results.splice(i, 1);
             }
         }
-    }
 
-    prepareInput() {
-        let lines = this.getLines();
-        if (lines) {
-            this.splitLines(lines);
-        } else {
-            // TODO: do something here...
-        }
+        this.activeLines = results;
     }
 
     private createIndicator(indicator: string, indicatorType: string, tags: string[], attributes: Array<{
