@@ -14,7 +14,6 @@ declare var $:any;
 })
 export class ActComponent implements OnInit {
     poorlyFormattedLines: Array<string[]> = [];
-    // TODO: rename this to "activeLines"
     activeLines: Array<string[]> = [];
     inactiveLines: Array<string[]> = [];
     owner: string = '';
@@ -188,6 +187,7 @@ export class ActComponent implements OnInit {
                             console.log("Can't handle more than one indicator type");
                         }
                         indicatorType = mappings[column];
+                        indicator = this.activeLines[row][column];
                         break;
                     }
                 }
